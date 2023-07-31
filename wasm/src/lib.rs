@@ -1,5 +1,4 @@
-use bindings::*;
-use exports::golem::fib::api::*;
+use bindings::{export, exports::golem::fib::api::*};
 use lib::fibonacci::{FibState, FIB_0};
 
 struct AppState(FibState);
@@ -32,4 +31,4 @@ impl Api for Fib {
         });
     }
 }
-bindings::export!(Fib);
+export!(Fib);
