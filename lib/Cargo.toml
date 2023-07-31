@@ -1,0 +1,10 @@
+[package]
+name = "lib"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+pretty_assertions = "~1.4.0"
+proptest = "~1.2.0"

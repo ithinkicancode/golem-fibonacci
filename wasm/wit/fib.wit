@@ -1,0 +1,13 @@
+package golem:fib
+
+interface api {
+
+  next: func() -> result<u64, string>
+
+  reset: func() -> ()
+
+}
+
+world fib {
+  export api
+}
