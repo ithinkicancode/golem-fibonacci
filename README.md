@@ -1,6 +1,6 @@
 # Synopsis
 
-This project serves as an example/template for building an application using [WebAssembly Component Model](https://github.com/webassembly/component-model) (and in this case, an app for Ziverge's [Golem Cloud](https://golem.cloud/golem-cloud)).  It is my recommendation on how to structure such a project.
+This project serves as an example/template for building an application using [WebAssembly Component Model](https://github.com/webassembly/component-model) (and in this case, an app for Ziverge's [Golem Cloud](https://preview1.golem.cloud/post/unveiling-golem-cloud)).  It is my recommendation on how to structure such a project.
 
 ## Problem statement
 
