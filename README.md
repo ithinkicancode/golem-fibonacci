@@ -1,6 +1,6 @@
 # Synopsis
 
-This project serves as an example/template for building an application using [WebAssembly Component Model](https://github.com/webassembly/component-model) (and in this case, an app for Ziverge's [Golem Cloud](https://preview1.golem.cloud/post/unveiling-golem-cloud)).  It is my recommendation on how to structure such a project.
+This project serves as an example/template for building an application using [WebAssembly Component Model](https://github.com/webassembly/component-model) (and in this case, an app for Ziverge's [Golem Cloud](https://www.golem.cloud/post/unveiling-golem-cloud).  It is my recommendation on how to structure such a project.
 
 ## Problem statement
 
@@ -12,7 +12,7 @@ This is the motivation of creating a project structure that allows us to follow 
 
 Although discussing the merits (and the associated costs) of writing (and maintaining) tests is out of scope here, the ability to test our apps locally in this case can be quite desireable.  Even though it's feasible to test and debug our apps directly in the cloud, the feedback loop of such practice is much slower, let alone the time wasted on rebuilding and redeploying apps.  This project (template) makes it possible to run tests without having to change or disable regions of our Wasm component code merely for testing purposes.  It's my current recommendation on building WASI apps until `cargo-component` improves (or better alternatives become available).
 
-Before I start the walkthrough and explain the project structure, make sure you have set up Rust's toolchain and installed `cargo-component`. Please refer to [Golem Cloud documentation](https://preview1.golem.cloud/learn/rust) for instructions.
+Before I start the walkthrough and explain the project structure, make sure you have set up Rust's toolchain and installed `cargo-component`. Please refer to [Golem Cloud documentation](https://www.golem.cloud/learn/rust) for instructions.
 
 ## Workspace structure
 
@@ -40,11 +40,11 @@ To build the Wasm assembly, run `cargo component build --release -p wasm` at the
 
 ## Running the app on Golem Cloud
 
-As a quick reference, here are the steps to run this app on Golem Cloud.  For details of various commands, please refer to [Golem CLI documentation](https://preview1.golem.cloud/learn/golem-cli) as well as its built-in help.
+As a quick reference, here are the steps to run this app on Golem Cloud.  For details of various commands, please refer to [Golem CLI documentation](https://www.golem.cloud/learn/golem-cli) as well as its built-in help.
 
 Upload this app and run it on Golem Cloud:
 
-1. Download the latest version of Golem CLI by [signing up](https://golem.cloud/sign-up) for the Developer Preview.
+1. Download the latest version of Golem CLI by [signing up](https://www.golem.cloud/sign-up) for the Developer Preview.
 2. Unzip the bundle to a directory.
 3. Define a shell alias to the Golem CLI for convenience. For example:
 
