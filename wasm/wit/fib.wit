@@ -4,7 +4,7 @@ interface api {
 
   next: func() -> result<u64, string>
 
-  reset: func() -> ()
+  reset: func()
 
 }
 
