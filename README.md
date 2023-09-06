@@ -44,16 +44,16 @@ Upload this app and run it on Golem Cloud:
   golem-cli template add --template-name fib target/wasm32-wasi/release/wasm.wasm
   ```
 
-6. Next, run this command to create an instance of our app.
+6. Next, run this command to create a worker for our app.
 
   ```bash
-  golem-cli worker add --worker-name fib-instance-1 --template-name fib
+  golem-cli worker add --worker-name fib-wrkr-1 --template-name fib
   ```
 
-7. Let's define another shell alias to invoke the instance. For example:
+7. Let's define a shell alias to invoke the instance. For example:
 
   ```bash
-  alias fib='golem-cli worker invoke-and-await --worker-name fib-instance-1 --template-name fib --function $*'
+  alias fib='golem-cli worker invoke-and-await --worker-name fib-wrkr-1 --template-name fib --function $*'
   ```
 
 > Note: `invoke-and-await` is akin to Akka's `ask` pattern whereas the `invoke` command is fire-and-forget.
@@ -81,10 +81,10 @@ Now that we know our app is running as expected, we can test out the promise of 
 We can interrupt our app by executing:
 
   ```bash
-  golem-cli worker interrupt --worker-name fib-instance-1 --template-name fib
+  golem-cli worker interrupt --worker-name fib-wrkr-1 --template-name fib
   ```
 
- (or simulate a crash with `golem-cli worker simulated-crash --worker-name fib-instance-1 --template-name fib`).
+ (or simulate a crash with `golem-cli worker simulated-crash --worker-name fib-wrkr-1 --template-name fib`).
 
  After that, run `fib golem:fib/api/next --parameters '[]'` again and verify that the Fibonacci number continues from that of the last invocation.
 
