@@ -1,16 +1,6 @@
 # Synopsis
 
-This project serves as an example/template for building an application using [WebAssembly Component Model](https://github.com/webassembly/component-model) (and in this case, an app for Ziverge's [Golem Cloud](https://www.golem.cloud/post/unveiling-golem-cloud).  It is my recommendation on how to structure such a project.
-
-## Problem statement
-
-The [`cargo-component`](https://github.com/bytecodealliance/cargo-component) project by Bytecode Alliance greatly smooths out the development process in building WebAssembly Component Model applications (in Rust).  You will define your app's public data structures (records and enums) and function interfaces in a [`wit` (Wasm interface type)](https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md) file, which is then used to generate the Rust bindings for your Wasm component.  The generated code sits in a module somewhere inside the `target` directory.  Running `cargo component build` will build a valid codebase successfully.
-
-Sadly, as of this writing, the regular Rust tooling (e.g. Clippy) lacks visibility to this module.  As a result, red squiggly lines will likely appear in our IDE for any data types defined in the `wit` file. Additionally, `cargo test` will fail because it cannot resolve those references.
-
-This is the motivation of creating a project structure that allows us to follow the development process we have accustomed to: write and run tests locally, as well as running them on CI.
-
-Although discussing the merits (and the associated costs) of writing (and maintaining) tests is out of scope here, the ability to test our apps locally in this case can be quite desireable.  Even though it's feasible to test and debug our apps directly in the cloud, the feedback loop of such practice is much slower, let alone the time wasted on rebuilding and redeploying apps.  This project (template) makes it possible to run tests without having to change or disable regions of our Wasm component code merely for testing purposes.  It's my current recommendation on building WASI apps until `cargo-component` improves (or better alternatives become available).
+This project serves as an example/template for building an application using [WebAssembly Component Model](https://github.com/webassembly/component-model) (and in this case, an app for Ziverge's [Golem Cloud](https://www.golem.cloud/post/unveiling-golem-cloud)).  It is my recommendation on how to structure such a project.
 
 Before I start the walkthrough and explain the project structure, make sure you have set up Rust's toolchain and installed `cargo-component`. Please refer to [Golem Cloud documentation](https://www.golem.cloud/learn/rust) for instructions.
 
@@ -36,7 +26,7 @@ To run the console app at the project root, do `cargo run -p app`.  Again, we wi
 
 Now that we have tests and the console app to guide the implementation, we should have a very good idea of how our APIs will look like.  Thereby, we shall express our APIs in the `wit` file.  Next, we will add some boilerplate code in the `wasm` module to glue the Rust bindings to our Wasm implementation. Please refer to the code in `wasm\lib.rs` as well as Golem's documentation.  The implementation in the Wasm module should be fairly trivial and quite similar to that of the console app.
 
-To build the Wasm assembly, run `cargo component build --release -p wasm` at the root of our project directory.  This will produce the `target/wasm32-wasi/release/fib.wasm` file in this case.
+To build the Wasm assembly, run `cargo component build --release -p wasm` at the root of our project directory.  This will produce the `target/wasm32-wasi/release/wasm.wasm` file in this case.
 
 ## Running the app on Golem Cloud
 
@@ -45,36 +35,30 @@ As a quick reference, here are the steps to run this app on Golem Cloud.  For de
 Upload this app and run it on Golem Cloud:
 
 1. Download the latest version of Golem CLI by [signing up](https://www.golem.cloud/sign-up) for the Developer Preview.
-2. Unzip the bundle to a directory.
-3. Define a shell alias to the Golem CLI for convenience. For example:
+2. Install Golem CLI by running `cargo install golem-cli`.
+3. Run `golem-cli account get` to go through the authorization process if you haven't done so.
+4. `cd` to the root of our project directory.
+5. Run the following command to upload the binary.
 
   ```bash
-  alias golem='{path-to-directory}/golem-cli/bin/golem'
+  golem-cli template add --template-name fib target/wasm32-wasi/release/wasm.wasm
   ```
 
-4. Run `golem account get` to go through the authorization process if you haven't done so.
-5. `cd` back to our project directory.
-6. Run the following command to upload the binary.
+6. Next, run this command to create an instance of our app.
 
   ```bash
-  golem component add --component-name fib target/wasm32-wasi/release/fib.wasm
+  golem-cli worker add --worker-name fib-instance-1 --template-name fib
   ```
 
-7. Next, run this command to create an instance of our app.
+7. Let's define another shell alias to invoke the instance. For example:
 
   ```bash
-  golem instance add --instance-name fib-instance-1 --component-name fib
-  ```
-
-8. Let's define another shell alias to invoke the instance. For example:
-
-  ```bash
-  alias fib='golem instance invoke-and-await --instance-name fib-instance-1 --component-name fib --function $*'
+  alias fib='golem-cli worker invoke-and-await --worker-name fib-instance-1 --template-name fib --function $*'
   ```
 
 > Note: `invoke-and-await` is akin to Akka's `ask` pattern whereas the `invoke` command is fire-and-forget.
 
-9. At last let's run our app! 🎉
+8. At last let's run our app! 🎉
 
   * Run the `next` command to get the next Fibonacci number. Repeat it a few times to verify that it produces the correct Fibonacci sequence.
 
@@ -97,10 +81,10 @@ Now that we know our app is running as expected, we can test out the promise of 
 We can interrupt our app by executing:
 
   ```bash
-  golem instance interrupt --instance-name fib-instance-1 --component-name fib
+  golem-cli worker interrupt --worker-name fib-instance-1 --template-name fib
   ```
 
- (or simulate a crash with `golem instance simulated-crash --instance-name fib-instance-1 --component-name fib`).
+ (or simulate a crash with `golem-cli worker simulated-crash --worker-name fib-instance-1 --template-name fib`).
 
  After that, run `fib golem:fib/api/next --parameters '[]'` again and verify that the Fibonacci number continues from that of the last invocation.
 
